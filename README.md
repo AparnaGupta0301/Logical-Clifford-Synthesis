@@ -28,7 +28,7 @@ The algorithm in this paper reduces the stabilizer matrix of the code into a sta
 ### Pauli Group
 
 Pauli operators acting on an n-qubit system can be defined as the Pauli group such that,
-$$ P_{n} = \{I,X,Y,Z\}^{\otimes n} $$
+$$P_{n} = \{I,X,Y,Z\}^{\otimes n}$$
 where $I$, $X$, $Y$, and $Z$ are Pauli matrices defined as:
 1. \[ I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \]
 2. \[ X = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} \]
