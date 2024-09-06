@@ -19,8 +19,10 @@ class SymplecticMatrix:
             for row in range(col, m):
                 if aug_matrix[row, col]:
                     break
-            else:
-                raise ValueError("Matrix is singular over GF(2)")
+        else:
+        # If no row has a 1 in the current column, the matrix is singular in GF(2)
+            raise ValueError("Matrix is singular over GF(2)")    
+            
             if row != col:
                 aug_matrix[[col, row]] = aug_matrix[[row, col]]
             for i in range(m):

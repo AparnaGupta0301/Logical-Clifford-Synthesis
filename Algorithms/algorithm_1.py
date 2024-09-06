@@ -70,15 +70,11 @@ class SymplecticOperations:
     
         for i in range(m):
             x_i, y_i = X[i, :], Y[i, :]
-            #print("x_i")
-            #print(x_i)
-           # print("y_i")
-           # print(y_i)
-            x_it = np.mod(np.matmul(x_i, F), 2)
+            x_it = (np.matmul(x_i, F))%2 
             if np.all(x_it == y_i):
                
                 continue
-            if self.symp_inn_pdt(x_i.reshape(1, -1), y_i.reshape(1, -1)) == 1:
+            if self.symp_inn_pdt(x_it.reshape(1, -1), y_i.reshape(1, -1)) == 1:
                 
                 h_i = np.mod(x_it + y_i, 2)
                 
@@ -88,7 +84,7 @@ class SymplecticOperations:
             else:
                 
                 w_i = self.find_w(x_it, y_i, Y[:i, :], n)            
-                
+        
                 h_i1 = np.mod(w_i + y_i, 2)
                 
                 h_i2 = np.mod(x_it + w_i, 2)
@@ -101,9 +97,8 @@ class SymplecticOperations:
 
     def find_w(self, x, y, Ys, n):
         A = fftshift(np.vstack([x, y] + [Ys[j, :] for j in range(Ys.shape[0])]), axes=1)
-        
+       # A = np.fft.fftshift(np.vstack([x, y, Ys]), axes=1)
         b = np.array([1, 1] + [self.symp_inn_pdt(Ys[j, :].reshape(1, -1), y.reshape(1, -1))[0] for j in range(Ys.shape[0])])
-        
         w, valid = self.gf2_gaussian_elimination_with_echelon(A, b)
         if not valid:
             raise ValueError("No valid solution found for w.")
