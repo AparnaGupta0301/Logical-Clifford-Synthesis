@@ -135,7 +135,7 @@ class FindAllSympMat:
         # Find indices of fixed basis vectors
         Basis_fixed_I = self.intersect(IbJb, I)
         Basis_fixed_J = self.intersect(IbJb, J)
-        Basis_fixed = Basis_fixed_I
+        Basis_fixed = [Basis_fixed_I, len(IbJb) + Basis_fixed_J]
         Basis_free = np.setdiff1d(np.arange(2*len(IbJb)), Basis_fixed)
 
         # Choices for each vector in subspace
