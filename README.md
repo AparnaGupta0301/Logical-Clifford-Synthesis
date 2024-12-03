@@ -33,20 +33,14 @@ This repository contains implementations of algorithms for synthesizing logical 
 - **Implementation**: Currently under development. The file will be named `algorithm_3.py`.
 
 ---
-# **Citation**
+## **Citation**
 If you use these algorithms in your research, please cite the related publication:
 
+Rengaswamy, Narayanan, Calderbank, Robert, Kadhe, Swanand, and Pfister, Henry D.  
+"Logical Clifford Synthesis for Stabilizer Codes."  
+*IEEE Transactions on Quantum Engineering*, vol. 1, 2020, pp. 1–23.  
+DOI: [10.1109/TQE.2020.3023419](https://doi.org/10.1109/TQE.2020.3023419)
 
-@article{rengaswamy2020logical,
-  title={Logical Clifford Synthesis for Stabilizer Codes},
-  author={Rengaswamy, Narayanan and Calderbank, Robert and Kadhe, Swanand and Pfister, Henry D.},
-  journal={IEEE Transactions on Quantum Engineering},
-  volume={1},
-  pages={1--23},
-  year={2020},
-  publisher={IEEE},
-  doi={10.1109/TQE.2020.3023419}
-}
 ---
 MIT License
 
