@@ -30,19 +30,22 @@ This repository contains implementations of algorithms for synthesizing logical 
   1. Translate logical Clifford operations into linear constraints on symplectic matrices.
   2. Use **Algorithm 2** to find all symplectic solutions.
   3. Translate symplectic matrices into physical quantum circuits.
-- **Implementation**: Currently under development. The file will be named `algorithm_3.py`.
+- **Implementation**: Currently under development. The file will is named `algorithm_3.py`.Here's the revised version with improved grammar and clarity:
+
+
+Refer to the example notebooks in the `Examples` folder for implementation examples. Please note that the example notebook for **Algorithm 3** is incomplete and still under development. The author is also actively working on providing comprehensive documentation for all usage scenarios. 
 
 ---
 ## **Citation**
 If you use these algorithms in your research, please cite the related publication:
 
-Rengaswamy, Narayanan, Calderbank, Robert, Kadhe, Swanand, and Pfister, Henry D.  
+Rengaswamy, Narayanan; Calderbank, Robert; Kadhe, Swanand; and Pfister, Henry D.  
 "Logical Clifford Synthesis for Stabilizer Codes."  
 *IEEE Transactions on Quantum Engineering*, vol. 1, 2020, pp. 1–23.  
 DOI: [10.1109/TQE.2020.3023419](https://doi.org/10.1109/TQE.2020.3023419)
 
 ---
-MIT License
+## **MIT License**
 
 Copyright (c) 2024 Aparna Gupta, University of Arizona
 
