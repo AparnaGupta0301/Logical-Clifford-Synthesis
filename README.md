@@ -35,3 +35,4 @@ This repository contains implementations of algorithms for synthesizing logical 
 ---
 
 ## Repository Structure
+/repository-root │ ├── algorithm_1.py # Implementation of Algorithm 1 ├── algorithm_2.py # Implementation of Algorithm 2 ├── algorithm_3.py # (Under development) Implementation of Algorithm 3 ├── examples/ # Examples demonstrating usage of the algorithms └── README.md #
