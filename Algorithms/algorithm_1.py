@@ -2,11 +2,11 @@
 
 import numpy as np
 from numpy.fft import fftshift
+from helper_functions.helperfunctions import *
 
 class SymplecticOperations:
     def __init__(self):
         pass
-
 
     def find_symp_mat_transvecs(self, X, Y):
         m, cols = X.shape
@@ -40,21 +40,18 @@ class SymplecticOperations:
                 Transvecs.append((self.Z_h(h_i1, n), h_i1))
                 Transvecs.append((self.Z_h(h_i2, n), h_i2))
         return F, Transvecs
-    
-    @staticmethod
-    def Z_h(h, n):
-        return np.mod(np.eye(2 * n) + np.mod(np.outer(fftshift(h), h), 2),2)
-        
-    @staticmethod
-    def symp_inn_pdt(X, Y):
-        return np.mod(np.sum(X * fftshift(Y, axes=1), axis=1), 2)
 
-    @staticmethod
     def find_w(self, x, y, Ys, n):
         A = fftshift(np.vstack([x, y] + [Ys[j, :] for j in range(Ys.shape[0])]), axes=1)
        # A = np.fft.fftshift(np.vstack([x, y, Ys]), axes=1)
         b = np.array([1, 1] + [self.symp_inn_pdt(Ys[j, :].reshape(1, -1), y.reshape(1, -1))[0] for j in range(Ys.shape[0])])
-        w, valid = self.gf2_gaussian_elimination_with_echelon(A, b)
+        w, valid = gf2_gaussian_elimination_with_echelon(A, b)
         if not valid:
             raise ValueError("No valid solution found for w.")
         return w
+    
+    def Z_h(self, h, n):
+        return np.mod(np.eye(2 * n) + np.mod(np.outer(fftshift(h), h), 2),2)
+        
+    def symp_inn_pdt(self, X, Y):
+        return np.mod(np.sum(X * fftshift(Y, axes=1), axis=1), 2)

@@ -1,12 +1,6 @@
 import numpy as np
-import sys
-
-# Import necessary modules
-sys.path.append(r"C:\Users\gapar\Logical-Clifford-Synthesis")
 from Algorithms.algorithm_1 import SymplecticOperations
-from helper_functions.helperfunctions import SymplecticMatrix
-
-# Initialize the SymplecticOperations class
+from helper_functions.helperfunctions import *
 symplectic_ops = SymplecticOperations()
 
 class FindAllSympMat:
@@ -19,7 +13,23 @@ class FindAllSympMat:
     """
     def __init__(self):
         self.symplectic_ops = SymplecticOperations()
-     
+    
+
+    @staticmethod
+    def intersect(arr1, arr2):
+        """
+        Find the intersection between two arrays and return the indices.
+
+        Parameters:
+        arr1 (numpy.ndarray): First array.
+        arr2 (numpy.ndarray): Second array.
+
+        Returns:
+        numpy.ndarray: Indices of intersection elements.
+        """
+        common_elements, ind_arr1, ind_arr2 = np.intersect1d(arr1, arr2, return_indices=True)
+        return ind_arr1
+
 
     def find_all_symp_mat(self, U, V, I, J):
         """
@@ -61,7 +71,7 @@ class FindAllSympMat:
 
         # Calculate matrix A and its inverse
         A = (U @ F0) % 2
-        Ainv = self.gf2matinv(A)
+        Ainv = gf2_matinv(A)
 
         # Combine Ibar and Jbar
         IbJb = np.union1d(Ibar, Jbar)
@@ -69,13 +79,12 @@ class FindAllSympMat:
         # Compute the basis for subspace
         Basis = A[np.ix_(np.concatenate([IbJb-1, m+IbJb-1]), )]
         Subspace = (np.array([list(format(i, f'0{2*len(IbJb)}b')) for i in range(2**(2*len(IbJb)))]).astype(int) @ Basis) % 2
-
         # Find indices of fixed basis vectors
         Basis_fixed_I = self.intersect(IbJb, I)
         Basis_fixed_J = self.intersect(IbJb, J)
         Basis_fixed = [Basis_fixed_I, len(IbJb) + Basis_fixed_J]
+        Basis_fixed = np.concatenate(Basis_fixed)
         Basis_free = np.setdiff1d(np.arange(2*len(IbJb)), Basis_fixed)
-
         # Choices for each vector in subspace
         Choices = [None] * alpha
 
@@ -117,20 +126,4 @@ class FindAllSympMat:
             F_all[l] = (F0 @ F) % 2
 
         return F_all
-    
-    @staticmethod
-    def intersect(arr1, arr2):
-        """
-        Find the intersection between two arrays and return the indices.
-
-        Parameters:
-        arr1 (numpy.ndarray): First array.
-        arr2 (numpy.ndarray): Second array.
-
-        Returns:
-        numpy.ndarray: Indices of intersection elements.
-        """
-        common_elements, ind_arr1, ind_arr2 = np.intersect1d(arr1, arr2, return_indices=True)
-        return ind_arr1
-
 

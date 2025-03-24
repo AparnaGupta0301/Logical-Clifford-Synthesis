@@ -1,12 +1,24 @@
-import sys
 import numpy as np
-sys.path.append(r"C:\\Users\\gapar\\Logical-Clifford-Synthesis")
 from Algorithms.algorithm_1 import SymplecticOperations
-
+from helper_functions.helperfunctions import *
 
 class SymplecticCodeSolver:
     def __init__(self):
         self.symplectic_ops = SymplecticOperations()
+
+    @staticmethod
+    def bi2de(b):
+        """
+        Convert a binary matrix to a decimal.
+
+        Parameters:
+        b (numpy.ndarray): Binary matrix to convert.
+
+        Returns:
+        numpy.ndarray: Decimal representation of the binary matrix.
+        """
+        b = np.array(b)
+        return b.dot(1 << np.arange(b.shape[-1])[::-1])
 
     def symplectic_code(self, U, V):
         """
@@ -42,7 +54,7 @@ class SymplecticCodeSolver:
 
         # Compute matrix A as U * F0 (mod 2) and its inverse in GF(2)
         A = U.dot(F0) % 2
-        Ainv = self.gf2matinv(A)
+        Ainv = gf2_matinv(A)
 
         # Basis for the symplectic subspace is constructed from parts of A
         Basis = np.vstack((A[(m - k):m, :], A[(2*m - k):(2*m), :]))
