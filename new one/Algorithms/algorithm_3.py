@@ -8,6 +8,51 @@ class SymplecticCodeSolver:
     def __init__(self):
         self.symplectic_ops = SymplecticOperations()
 
+    def gf2matinv(self, matrix):
+        """
+        Compute the inverse of a matrix in GF(2) using Gaussian elimination.
+
+        Parameters:
+        matrix (numpy.ndarray): A square matrix to invert in GF(2).
+
+        Returns:
+        numpy.ndarray: The inverse of the matrix in GF(2).
+
+        Raises:
+        ValueError: If the matrix is singular (i.e., not invertible).
+        """
+        matrix = np.array(matrix, dtype=np.int8) % 2
+        m = len(matrix)
+        aug_matrix = np.concatenate((matrix, np.eye(m, dtype=np.int8)), axis=1)
+        for col in range(m):
+            for row in range(col, m):
+                if aug_matrix[row, col]:
+                    if row != col:
+                        aug_matrix[[col, row]] = aug_matrix[[row, col]]
+                    break
+            else:
+                raise ValueError("Matrix is singular over GF(2)")
+
+            for i in range(m):
+                if i != col and aug_matrix[i, col]:
+                    aug_matrix[i] = (aug_matrix[i] + aug_matrix[col]) % 2
+
+        return aug_matrix[:, m:]
+
+    @staticmethod
+    def bi2de(b):
+        """
+        Convert a binary matrix to a decimal.
+
+        Parameters:
+        b (numpy.ndarray): Binary matrix to convert.
+
+        Returns:
+        numpy.ndarray: Decimal representation of the binary matrix.
+        """
+        b = np.array(b)
+        return b.dot(1 << np.arange(b.shape[-1])[::-1])
+
     def symplectic_code(self, U, V):
         """
         Generate all symplectic matrices satisfying the given constraints.

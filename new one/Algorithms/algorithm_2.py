@@ -2,9 +2,9 @@ import numpy as np
 import sys
 
 # Import necessary modules
-sys.path.append(r"C:\Users\gapar\Logical-Clifford-Synthesis")
+sys.path.append(r"C:\Users\gapar\OneDrive\Documents\GitHub\Logical-Clifford-Synthesis\new one")
 from Algorithms.algorithm_1 import SymplecticOperations
-from helper_functions.helperfunctions import SymplecticMatrix
+#from helper_functions.helperfunctions import SymplecticMatrix
 
 # Initialize the SymplecticOperations class
 symplectic_ops = SymplecticOperations()
@@ -19,7 +19,69 @@ class FindAllSympMat:
     """
     def __init__(self):
         self.symplectic_ops = SymplecticOperations()
-     
+    
+    @staticmethod
+    def gf2matinv(matrix):
+        """
+        Compute the inverse of a matrix in GF(2) using Gaussian elimination.
+
+        Parameters:
+        matrix (numpy.ndarray): A square matrix to invert in GF(2).
+
+        Returns:
+        numpy.ndarray: The inverse of the matrix in GF(2).
+
+        Raises:
+        ValueError: If the matrix is singular (i.e., not invertible).
+        """
+        matrix = np.array(matrix, dtype=np.int8) % 2  # Ensure GF(2) operations
+        m = len(matrix)
+        aug_matrix = np.concatenate((matrix, np.eye(m, dtype=np.int8)), axis=1)  # Augment with identity matrix
+
+        # Gaussian elimination for GF(2)
+        for col in range(m):
+            for row in range(col, m):
+                if aug_matrix[row, col]:
+                    if row != col:
+                        aug_matrix[[col, row]] = aug_matrix[[row, col]]  # Swap rows
+                    break
+            else:
+                raise ValueError("Matrix is singular over GF(2)")
+
+            for i in range(m):
+                if i != col and aug_matrix[i, col]:
+                    aug_matrix[i] = (aug_matrix[i] + aug_matrix[col]) % 2  # Row operation
+
+        return aug_matrix[:, m:]  # Return the inverse portion
+
+    @staticmethod
+    def intersect(arr1, arr2):
+        """
+        Find the intersection between two arrays and return the indices.
+
+        Parameters:
+        arr1 (numpy.ndarray): First array.
+        arr2 (numpy.ndarray): Second array.
+
+        Returns:
+        numpy.ndarray: Indices of intersection elements.
+        """
+        common_elements, ind_arr1, ind_arr2 = np.intersect1d(arr1, arr2, return_indices=True)
+        return ind_arr1
+
+    @staticmethod
+    def setdiff(arr1, arr2):
+        """
+        Mimics MATLAB's setdiff, returning elements in arr1 not in arr2.
+
+        Parameters:
+        arr1 (numpy.ndarray): First array.
+        arr2 (numpy.ndarray): Second array.
+
+        Returns:
+        numpy.ndarray: Array of elements present in arr1 but not in arr2.
+        """
+        return np.setdiff1d(arr1, arr2)
 
     def find_all_symp_mat(self, U, V, I, J):
         """
@@ -48,8 +110,8 @@ class FindAllSympMat:
         J = np.array(J).flatten()
 
         # Compute the complement of I and J in [1, m]
-        Ibar = np.setdiff1d(np.arange(1, m+1), I)
-        Jbar = np.setdiff1d(np.arange(1, m+1), J)
+        Ibar = self.setdiff(np.arange(1, m+1), I)
+        Jbar = self.setdiff(np.arange(1, m+1), J)
         alpha = len(Ibar) + len(Jbar)
 
         # Total number of solutions
@@ -68,14 +130,18 @@ class FindAllSympMat:
 
         # Compute the basis for subspace
         Basis = A[np.ix_(np.concatenate([IbJb-1, m+IbJb-1]), )]
+        print(Basis)
         Subspace = (np.array([list(format(i, f'0{2*len(IbJb)}b')) for i in range(2**(2*len(IbJb)))]).astype(int) @ Basis) % 2
-
+        print(Subspace)
         # Find indices of fixed basis vectors
         Basis_fixed_I = self.intersect(IbJb, I)
+        
         Basis_fixed_J = self.intersect(IbJb, J)
         Basis_fixed = [Basis_fixed_I, len(IbJb) + Basis_fixed_J]
-        Basis_free = np.setdiff1d(np.arange(2*len(IbJb)), Basis_fixed)
-
+        Basis_fixed = np.concatenate(Basis_fixed)
+        print(Basis_fixed)
+        Basis_free = self.setdiff(np.arange(2*len(IbJb)), Basis_fixed)
+        print(Basis_free)
         # Choices for each vector in subspace
         Choices = [None] * alpha
 
@@ -90,7 +156,7 @@ class FindAllSympMat:
 
             Innpdts = (Subspace @ np.fft.fftshift(Basis[Basis_fixed, :], axes=1).T) % 2
             Choices[i] = Subspace[np.all(np.mod(Innpdts, 2) == h, axis=1), :]
-
+        print(Choices)
         # Generate all symplectic matrices
         for l in range(tot):
             Bl = A.copy()
@@ -117,20 +183,4 @@ class FindAllSympMat:
             F_all[l] = (F0 @ F) % 2
 
         return F_all
-    
-    @staticmethod
-    def intersect(arr1, arr2):
-        """
-        Find the intersection between two arrays and return the indices.
-
-        Parameters:
-        arr1 (numpy.ndarray): First array.
-        arr2 (numpy.ndarray): Second array.
-
-        Returns:
-        numpy.ndarray: Indices of intersection elements.
-        """
-        common_elements, ind_arr1, ind_arr2 = np.intersect1d(arr1, arr2, return_indices=True)
-        return ind_arr1
-
 
