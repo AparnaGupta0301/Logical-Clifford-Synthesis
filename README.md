@@ -10,7 +10,7 @@ This repository contains implementations of algorithms for synthesizing logical 
 ### Algorithm 2: Enumerating All Symplectic Solutions
 - **Purpose**: Enumerates all symplectic solutions for a system of linear equations by leveraging degrees of freedom in partially constrained matrices.
 ---
-### Algorithm 3: Logical Clifford Synthesis (LCS) [Under Development]
+### Algorithm 3: Logical Clifford Synthesis (LCS)
 - **Purpose**: Synthesizes all physical realizations of logical Clifford operators for stabilizer codes.
 ---
 ## **Citation**
